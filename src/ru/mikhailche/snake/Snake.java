@@ -1,4 +1,4 @@
-package ru.mikhailche.snake;
+п»їpackage ru.mikhailche.snake;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -223,12 +223,12 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 			loadScoreboard();
 		}
 		Vector<String> names = new Vector<String>(scoreboard.keySet());
-		String message = "Рекордсмены: \r\n";
+		String message = "Р РµРєРѕСЂРґСЃРјРµРЅС‹: \r\n";
 		for (int i = 0; i < names.size(); i++) {
 			message += names.get(i) + ": " + scoreboard.get(names.get(i))
 					+ "\r\n";
 		}
-		JOptionPane.showMessageDialog(null, message, "Таблица рекордов",
+		JOptionPane.showMessageDialog(null, message, "РўР°Р±Р»РёС†Р° СЂРµРєРѕСЂРґРѕРІ",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -344,7 +344,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 
 	public void moveToHead() {
 		if (snake.contains(newHeadPoint)) {
-			Object o = JOptionPane.showInputDialog("Ваше имя:");
+			Object o = JOptionPane.showInputDialog("Р’Р°С€Рµ РёРјСЏ:");
 			if (o instanceof String) {
 				addScoreboard((String) o, points);
 				showRecordTable();
@@ -447,7 +447,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 
 		frame.add(snake);
 		JMenuBar bar = new JMenuBar();
-		JMenuItem item = new JMenuItem("Таблица рекордов");
+		JMenuItem item = new JMenuItem("РўР°Р±Р»РёС†Р° СЂРµРєРѕСЂРґРѕРІ");
 		item.addActionListener(new ActionListener() {
 
 			@Override
