@@ -31,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Snake extends JPanel implements Runnable, KeyListener {
+	private static int gameCycleTime = 50;
 	private static final long serialVersionUID = 1L;
 	int snakeFieldWidth = 170 / 2;
 	int snakeFieldHeight = 100 / 2;
@@ -131,8 +132,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 			}
 			byte[] buffer = new byte[(int) (format.getFrameRate() * length)];
 			for (int i = 0; i < buffer.length; i++) {
-				double sin = Math.sin(2.0 * Math.PI * Hz * i
-						/ format.getFrameRate()) * 16;
+				double sin = Math.sin(2.0 * Math.PI * Hz * i / format.getFrameRate()) * 16;
 				if (sin > Byte.MAX_VALUE) {
 					buffer[i] = Byte.MAX_VALUE;
 
@@ -225,11 +225,9 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 		Vector<String> names = new Vector<String>(scoreboard.keySet());
 		String message = "Рекордсмены: \r\n";
 		for (int i = 0; i < names.size(); i++) {
-			message += names.get(i) + ": " + scoreboard.get(names.get(i))
-					+ "\r\n";
+			message += names.get(i) + ": " + scoreboard.get(names.get(i)) + "\r\n";
 		}
-		JOptionPane.showMessageDialog(null, message, "Таблица рекордов",
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, "Таблица рекордов", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	LinkedList<Point> snake = new LinkedList<Point>();
@@ -253,8 +251,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 	public void resizeGame() {
 		snakeFieldWidth = (int) (getWidth() / 15.0);
 		snakeFieldHeight = (int) (getHeight() / 15.0);
-		setPreferredSize(new Dimension((int) (snakeFieldWidth * 15.0),
-				(int) (snakeFieldHeight * 15.0)));
+		setPreferredSize(new Dimension((int) (snakeFieldWidth * 15.0), (int) (snakeFieldHeight * 15.0)));
 	}
 
 	public void paint(Graphics d) {
@@ -263,20 +260,17 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < snake.size(); i++) {
-			g.setColor(new Color((int) (128.0 * (double) i / (double) snake
-					.size()),
+			g.setColor(new Color((int) (128.0 * (double) i / (double) snake.size()),
 					(int) (128.0 * (double) i / (double) snake.size()),
 					(int) (128.0 * (double) i / (double) snake.size())));
-			g.drawRect((snake.get(i).x % snakeFieldWidth) * getWidth()
-					/ snakeFieldWidth + 1, (snake.get(i).y % snakeFieldHeight)
-					* getHeight() / snakeFieldHeight + 1, getWidth()
-					/ snakeFieldWidth - 2, getHeight() / snakeFieldHeight - 2);
+			g.drawRect((snake.get(i).x % snakeFieldWidth) * getWidth() / snakeFieldWidth + 1,
+					(snake.get(i).y % snakeFieldHeight) * getHeight() / snakeFieldHeight + 1,
+					getWidth() / snakeFieldWidth - 2, getHeight() / snakeFieldHeight - 2);
 		}
 		g.setColor(Color.RED);
 		for (int i = 0; i < food.size(); i++) {
-			g.fillOval(food.get(i).x * getWidth() / snakeFieldWidth,
-					food.get(i).y * getHeight() / snakeFieldHeight, getWidth()
-							/ snakeFieldWidth, getHeight() / snakeFieldHeight);
+			g.fillOval(food.get(i).x * getWidth() / snakeFieldWidth, food.get(i).y * getHeight() / snakeFieldHeight,
+					getWidth() / snakeFieldWidth, getHeight() / snakeFieldHeight);
 		}
 		g.setColor(Color.BLACK);
 		g.setFont(new Font("Arial", Font.BOLD, 20));
@@ -307,7 +301,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 		repaint();
 
 		try {
-			Thread.sleep(30);
+			Thread.sleep(gameCycleTime);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -316,27 +310,19 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 	public void moveSnake() {
 		applyDesiredSnakeDirection();
 		if (currentSnakeDirection.equals(direction.NORTH)) {
-			newHeadPoint.x = (snake.peek().x + snakeFieldWidth)
-					% snakeFieldWidth;
-			newHeadPoint.y = (snake.peek().y - 1 + snakeFieldHeight)
-					% snakeFieldHeight;
+			newHeadPoint.x = (snake.peek().x + snakeFieldWidth) % snakeFieldWidth;
+			newHeadPoint.y = (snake.peek().y - 1 + snakeFieldHeight) % snakeFieldHeight;
 		} else if (currentSnakeDirection.equals(direction.EAST)) {
-			newHeadPoint.x = (snake.peek().x + 1 + snakeFieldWidth)
-					% snakeFieldWidth;
-			newHeadPoint.y = (snake.peek().y + snakeFieldHeight)
-					% snakeFieldHeight;
+			newHeadPoint.x = (snake.peek().x + 1 + snakeFieldWidth) % snakeFieldWidth;
+			newHeadPoint.y = (snake.peek().y + snakeFieldHeight) % snakeFieldHeight;
 
 		} else if (currentSnakeDirection.equals(direction.SOUTH)) {
-			newHeadPoint.x = (snake.peek().x + snakeFieldWidth)
-					% snakeFieldWidth;
-			newHeadPoint.y = (snake.peek().y + 1 + snakeFieldHeight)
-					% snakeFieldHeight;
+			newHeadPoint.x = (snake.peek().x + snakeFieldWidth) % snakeFieldWidth;
+			newHeadPoint.y = (snake.peek().y + 1 + snakeFieldHeight) % snakeFieldHeight;
 
 		} else if (currentSnakeDirection.equals(direction.WEST)) {
-			newHeadPoint.x = (snake.peek().x - 1 + snakeFieldWidth)
-					% snakeFieldWidth;
-			newHeadPoint.y = (snake.peek().y + snakeFieldHeight)
-					% snakeFieldHeight;
+			newHeadPoint.x = (snake.peek().x - 1 + snakeFieldWidth) % snakeFieldWidth;
+			newHeadPoint.y = (snake.peek().y + snakeFieldHeight) % snakeFieldHeight;
 
 		}
 		moveToHead();
@@ -363,14 +349,12 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 	public void placeFood() {
 		Random r = new Random();
 		if (food.isEmpty()) {
-			food.add(new Point(r.nextInt(snakeFieldWidth), r
-					.nextInt(snakeFieldHeight)));
+			food.add(new Point(r.nextInt(snakeFieldWidth), r.nextInt(snakeFieldHeight)));
 		}
 	}
 
 	public void digestFood() {
 		if (food.contains(snake.getFirst())) {
-
 			Point newTail = new Point();
 			Point tail = snake.getLast();
 			newTail.x = tail.x;
@@ -379,6 +363,7 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 			food.clear();
 			playSound = true;
 			points++;
+			gameCycleTime--;
 		}
 	}
 
@@ -416,17 +401,13 @@ public class Snake extends JPanel implements Runnable, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_LEFT
-				|| e.getKeyCode() == KeyEvent.VK_A) {
+		if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 			setDirection(direction.WEST);
-		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT
-				|| e.getKeyCode() == KeyEvent.VK_D) {
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 			setDirection(direction.EAST);
-		} else if (e.getKeyCode() == KeyEvent.VK_UP
-				|| e.getKeyCode() == KeyEvent.VK_W) {
+		} else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 			setDirection(direction.NORTH);
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN
-				|| e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 			setDirection(direction.SOUTH);
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			resizeGame();
